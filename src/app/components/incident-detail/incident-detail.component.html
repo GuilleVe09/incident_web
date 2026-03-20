@@ -1,0 +1,99 @@
+<div class="detail-container" *ngIf="!loading && incident">
+
+  <!-- Header -->
+  <div class="detail-header">
+    <button pButton icon="pi pi-arrow-left" label="Back"
+            class="p-button-text p-button-sm"
+            (click)="goBack()">
+    </button>
+    <h2>{{ incident.title }}</h2>
+  </div>
+
+  <!-- Info Card -->
+  <p-card styleClass="info-card">
+    <div class="info-grid">
+      <div class="info-item">
+        <span class="info-label">Severity</span>
+        <p-tag [value]="incident.severity"
+               [severity]="getSeverityTag(incident.severity)">
+        </p-tag>
+      </div>
+
+      <div class="info-item">
+        <span class="info-label">Status</span>
+        <div class="status-change">
+          <p-dropdown [options]="statusOptions"
+                      [(ngModel)]="selectedStatus"
+                      (onChange)="onStatusChange()"
+                      [disabled]="updatingStatus"
+                      [style]="{'min-width': '150px'}">
+          </p-dropdown>
+        </div>
+      </div>
+
+      <div class="info-item">
+        <span class="info-label">Service</span>
+        <span class="service-id">{{ incident.serviceId }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="info-label">Created</span>
+        <span>{{ incident.createdAt | date:'medium' }}</span>
+      </div>
+
+      <div class="info-item">
+        <span class="info-label">Updated</span>
+        <span>{{ incident.updatedAt | date:'medium' }}</span>
+      </div>
+    </div>
+
+    <div class="description" *ngIf="incident.description">
+      <span class="info-label">Description</span>
+      <p>{{ incident.description }}</p>
+    </div>
+  </p-card>
+
+  <!-- Timeline -->
+  <div class="timeline-section">
+    <h3>
+      <i class="pi pi-clock"></i>
+      Event Timeline
+      <span class="event-count">{{ incident.timeline.length }} events</span>
+    </h3>
+
+    <p-timeline [value]="incident.timeline" layout="vertical" align="left">
+      <ng-template pTemplate="marker" let-event>
+        <span class="timeline-marker"
+              [style.backgroundColor]="getEventColor(event.type)">
+          <i [class]="getEventIcon(event.type)"></i>
+        </span>
+      </ng-template>
+
+      <ng-template pTemplate="content" let-event>
+        <div class="timeline-event">
+          <div class="event-header">
+            <strong>{{ formatEventType(event.type) }}</strong>
+            <small>{{ event.occurredAt | date:'medium' }}</small>
+          </div>
+          <div class="event-payload">
+            <pre>{{ event.payload | json }}</pre>
+          </div>
+          <small class="correlation-id">
+            ID: {{ event.metadata?.correlationId }}
+          </small>
+        </div>
+      </ng-template>
+    </p-timeline>
+
+    <div class="empty-timeline" *ngIf="incident.timeline.length === 0">
+      <i class="pi pi-clock"></i>
+      <p>No events recorded yet.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Loading -->
+<div class="loading" *ngIf="loading">
+  <i class="pi pi-spin pi-spinner" style="font-size: 2rem"></i>
+  <p>Loading incident...</p>
+</div>

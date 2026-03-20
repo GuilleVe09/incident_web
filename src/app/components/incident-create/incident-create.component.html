@@ -1,0 +1,81 @@
+<div class="create-container">
+  <div class="create-header">
+    <button pButton icon="pi pi-arrow-left" label="Back"
+            class="p-button-text p-button-sm"
+            (click)="goBack()">
+    </button>
+    <h2>Create Incident</h2>
+  </div>
+
+  <p-card>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <!-- Title -->
+      <div class="field">
+        <label for="title">Title *</label>
+        <input id="title" type="text" pInputText
+               formControlName="title"
+               placeholder="Brief description of the incident"
+               [class.ng-dirty]="form.get('title')?.touched" />
+        <small class="p-error"
+               *ngIf="form.get('title')?.touched && form.get('title')?.errors?.['required']">
+          Title is required.
+        </small>
+      </div>
+
+      <!-- Description -->
+      <div class="field">
+        <label for="description">Description</label>
+        <textarea id="description" pInputTextarea
+                  formControlName="description"
+                  placeholder="Detailed description of what happened..."
+                  [rows]="4" [autoResize]="true">
+        </textarea>
+      </div>
+
+      <!-- Severity -->
+      <div class="field">
+        <label for="severity">Severity *</label>
+        <p-dropdown id="severity"
+                    [options]="severityOptions"
+                    formControlName="severity"
+                    placeholder="Select severity"
+                    [style]="{'width': '100%'}">
+        </p-dropdown>
+        <small class="p-error"
+               *ngIf="form.get('severity')?.touched && form.get('severity')?.errors?.['required']">
+          Severity is required.
+        </small>
+      </div>
+
+      <!-- Service -->
+      <div class="field">
+        <label for="serviceId">Service *</label>
+        <p-dropdown id="serviceId"
+                    [options]="serviceOptions"
+                    formControlName="serviceId"
+                    placeholder="Select service"
+                    [style]="{'width': '100%'}">
+        </p-dropdown>
+        <small class="p-error"
+               *ngIf="form.get('serviceId')?.touched && form.get('serviceId')?.errors?.['required']">
+          Service is required.
+        </small>
+      </div>
+
+      <!-- Buttons -->
+      <div class="actions">
+        <button pButton type="button" label="Cancel"
+                class="p-button-outlined"
+                (click)="goBack()">
+        </button>
+        <button pButton type="submit" label="Create Incident"
+                icon="pi pi-check"
+                [loading]="submitting"
+                [disabled]="submitting">
+        </button>
+      </div>
+
+    </form>
+  </p-card>
+</div>
