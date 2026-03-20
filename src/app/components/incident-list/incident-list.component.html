@@ -1,0 +1,100 @@
+<div class="list-container">
+  <div class="list-header">
+    <h2>Incidents</h2>
+    <span class="total-badge">{{ total }} total</span>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters">
+    <div class="filter-row">
+      <span class="p-input-icon-left search-input">
+        <i class="pi pi-search"></i>
+        <input type="text" pInputText
+               [(ngModel)]="searchQuery"
+               placeholder="Search by title..."
+               (keyup.enter)="onSearch()" />
+      </span>
+
+      <p-dropdown [options]="statusOptions"
+                  [(ngModel)]="selectedStatus"
+                  placeholder="All Status"
+                  (onChange)="onFilter()"
+                  [showClear]="false">
+      </p-dropdown>
+
+      <p-dropdown [options]="severityOptions"
+                  [(ngModel)]="selectedSeverity"
+                  placeholder="All Severity"
+                  (onChange)="onFilter()"
+                  [showClear]="false">
+      </p-dropdown>
+
+      <button pButton label="Search" icon="pi pi-search"
+              class="p-button-sm" (click)="onSearch()">
+      </button>
+
+      <button pButton label="Clear" icon="pi pi-times"
+              class="p-button-sm p-button-outlined"
+              (click)="clearFilters()">
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <p-table [value]="incidents" [loading]="loading"
+           [rowHover]="true" styleClass="p-datatable-sm">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Title</th>
+        <th style="width: 120px">Severity</th>
+        <th style="width: 130px">Status</th>
+        <th style="width: 140px">Service</th>
+        <th style="width: 170px">Created</th>
+        <th style="width: 80px">Actions</th>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-incident>
+      <tr>
+        <td class="title-cell">{{ incident.title }}</td>
+        <td>
+          <p-tag [value]="incident.severity"
+                 [severity]="getSeverityTag(incident.severity)">
+          </p-tag>
+        </td>
+        <td>
+          <p-tag [value]="formatStatus(incident.status)"
+                 [severity]="getStatusTag(incident.status)">
+          </p-tag>
+        </td>
+        <td>
+          <span class="service-id">{{ incident.serviceId }}</span>
+        </td>
+        <td>{{ incident.createdAt | date:'short' }}</td>
+        <td>
+          <button pButton icon="pi pi-eye"
+                  class="p-button-sm p-button-text p-button-rounded"
+                  (click)="viewDetail(incident)"
+                  pTooltip="View detail">
+          </button>
+        </td>
+      </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="6" class="empty-message">
+          <i class="pi pi-inbox"></i>
+          <p>No incidents found</p>
+        </td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <!-- Paginador -->
+  <p-paginator [rows]="pageSize"
+               [totalRecords]="total"
+               [rowsPerPageOptions]="[5, 10, 20]"
+               (onPageChange)="onPageChange($event)">
+  </p-paginator>
+</div>

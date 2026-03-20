@@ -1,0 +1,23 @@
+<div class="layout">
+  <header class="header">
+    <div class="header-content">
+      <a routerLink="/incidents" class="logo">
+        <i class="pi pi-shield"></i>
+        Incident Manager
+      </a>
+      <nav>
+        <a routerLink="/incidents" routerLinkActive="active"
+           [routerLinkActiveOptions]="{exact: true}" class="nav-link">
+          <i class="pi pi-list"></i> Incidents
+        </a>
+        <a routerLink="/incidents/create" routerLinkActive="active" class="nav-link">
+          <i class="pi pi-plus"></i> Create
+        </a>
+      </nav>
+    </div>
+  </header>
+  <main class="main-content">
+    <p-toast></p-toast>
+    <router-outlet></router-outlet>
+  </main>
+</div>
